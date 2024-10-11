@@ -23,7 +23,6 @@ def generate_launch_description():
         config_file_launch_arg,
         Node(
             package='field_friend_driver',
-            namespace='field_friend_driver_node',
             executable='field_friend_driver_node',
             parameters=[config_file],
             respawn=True,
