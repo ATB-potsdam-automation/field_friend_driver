@@ -1,7 +1,7 @@
 from typing import Dict
 
-from app_field_friend.data.data_bms import DataBMS
-from app_field_friend.communication.communication import Communication
+from field_friend_driver.data.data_bms import DataBMS
+from field_friend_driver.communication.communication import Communication
 from sensor_msgs.msg import BatteryState
 from geometry_msgs.msg import PoseStamped
 from rclpy.node import Node

@@ -13,7 +13,7 @@ def generate_launch_description():
 
     config_directory = os.path.join(
         ament_index_python.packages.get_package_share_directory(
-            'app_field_friend'),
+            'field_friend_driver'),
         'config')
     config_file_launch_arg = DeclareLaunchArgument(
         'config_file', default_value=os.path.join(config_directory, 'default.yaml')
@@ -22,7 +22,7 @@ def generate_launch_description():
     return LaunchDescription([
         config_file_launch_arg,
         Node(
-            package='app_field_friend',
+            package='field_friend_driver',
             namespace='field_friend_driver_node',
             executable='field_friend_driver_node',
             parameters=[config_file],

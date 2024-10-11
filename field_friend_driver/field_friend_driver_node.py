@@ -1,20 +1,20 @@
 #!/usr/bin/env python3
 
 from ament_index_python.packages import get_package_share_directory
-from app_field_friend.communication.serial_communication import SerialCommunication
-from app_field_friend.modules.bms_handler import BMSHandler
-from app_field_friend.modules.estop_handler import EStopHandler
-from app_field_friend.modules.odom_handler import OdomHandler
-from app_field_friend.modules.twist_handler import TwistHandler
-from app_field_friend.modules.yaxis_handler import YAxisHandler
-from app_field_friend.modules.zaxis_handler import ZAxisHandler
-from app_field_friend.modules.configuration_handler import ConfigurationHandler
+from field_friend_driver.communication.serial_communication import SerialCommunication
+from field_friend_driver.modules.bms_handler import BMSHandler
+from field_friend_driver.modules.estop_handler import EStopHandler
+from field_friend_driver.modules.odom_handler import OdomHandler
+from field_friend_driver.modules.twist_handler import TwistHandler
+from field_friend_driver.modules.yaxis_handler import YAxisHandler
+from field_friend_driver.modules.zaxis_handler import ZAxisHandler
+from field_friend_driver.modules.configuration_handler import ConfigurationHandler
 
 import rclpy
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 
-PACKAGE_NAME = 'app_field_friend'
+PACKAGE_NAME = 'field_friend_driver'
 
 
 class FieldFriendDriver(Node):

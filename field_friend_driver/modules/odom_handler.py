@@ -1,7 +1,7 @@
 from typing import Dict
 
-from app_field_friend.data.data_odom import DataOdom
-from app_field_friend.communication.communication import Communication
+from field_friend_driver.data.data_odom import DataOdom
+from field_friend_driver.communication.communication import Communication
 from geometry_msgs.msg import PoseStamped
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
