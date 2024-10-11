@@ -1,0 +1,8 @@
+/**:
+    ros__parameters:
+        ## Sensor standard deviation [x,y,z] (optional)
+        ## This value is used to override the covariance matrix in nav_msgs/Odometry
+        ## Important: Make sure the values provided are in decimal points, or else might give error in execution
+        pose_stddev: [0.1, 0.1, 0.0, 0.0, 0.0, 0.1] # [m]
+        twist_stddev: [0.01, 0.0, 0.0, 0.0, 0.0, 0.01] # [m/s]
+        publish_tf: False

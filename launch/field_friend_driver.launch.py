@@ -1,0 +1,33 @@
+import os
+
+import ament_index_python.packages
+from launch import LaunchDescription
+from launch.actions import DeclareLaunchArgument
+from launch.substitutions import LaunchConfiguration
+from launch_ros.actions import Node
+
+
+def generate_launch_description():
+
+    config_file = LaunchConfiguration('config_file')
+
+    config_directory = os.path.join(
+        ament_index_python.packages.get_package_share_directory(
+            'app_field_friend'),
+        'config')
+    config_file_launch_arg = DeclareLaunchArgument(
+        'config_file', default_value=os.path.join(config_directory, 'default.yaml')
+    )
+
+    return LaunchDescription([
+        config_file_launch_arg,
+        Node(
+            package='app_field_friend',
+            namespace='field_friend_driver_node',
+            executable='field_friend_driver_node',
+            parameters=[config_file],
+            respawn=True,
+            respawn_delay=5,
+            name='controller'
+        )
+    ])
