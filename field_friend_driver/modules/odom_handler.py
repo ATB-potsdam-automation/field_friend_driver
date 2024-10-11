@@ -35,7 +35,7 @@ class OdomHandler:
         self._publish_tf = node.get_parameter('publish_tf').value
 
         # Publisher
-        self._publisher = node.create_publisher(Odometry, 'odometry', 10)
+        self._publisher = node.create_publisher(Odometry, 'odom', 10)
         if self._publish_tf:
             self._tf_broadcaster = TransformBroadcaster(node)
 
