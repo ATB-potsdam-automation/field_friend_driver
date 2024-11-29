@@ -1,6 +1,7 @@
-from field_friend_driver.communication.communication import Communication
 from geometry_msgs.msg import Twist
 from rclpy.node import Node
+
+from field_friend_driver.communication.communication import Communication
 
 
 class TwistHandler:
