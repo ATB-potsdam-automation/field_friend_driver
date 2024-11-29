@@ -1,41 +1,96 @@
 #!/usr/bin/env python3
+import os
 from functools import reduce
 from operator import ixor
-import os
 from threading import Lock
-from typing import List
+from typing import Any, List
 
+import rclpy
 import serial
+from rcl_interfaces.msg import ParameterDescriptor
+from rclpy.node import Node
 
 from .communication import Communication
+
+
+class CoreData():
+    def __init__(self, name: str, pos: int, type: str, default: Any) -> None:
+        self._name = name
+        self._pos = pos
+        self._default = default
+        self._type = type
+
+    def get_name(self) -> str:
+        return self._name
+
+    def get_type(self) -> str:
+        return self._type
+
+    def get_pos(self) -> int:
+        return self._pos
+
+    def get_default(self) -> Any:
+        return self._default
 
 
 class SerialCommunication(Communication):
     """Handle serial communication."""
 
-    def __init__(self, logger):
+    def __init__(self, node: Node):
         super().__init__()
-        self.logger = logger
-        self.logger.info('Init serial communication')
+        self._logger = node.get_logger()
+        self._logger.info('Init serial communication')
         self.open_port()
         self.mutex = Lock()
-        self._core_data = {
-            'time': 0.0,
-            'linear_speed': 0.0,
-            'angular_speed': 0.0,
-            'estop1_level': True,
-            'estop2_level': True,
-            'y_end_l': 0.0,
-            'y_end_r': 0.0,
-            'y_axis_idle': False,
-            'y_axis_position': 0.0,
-            'y_alarm_level': False,
-            'z_end_t': 0.0,
-            'z_end_b': 0.0,
-            'z_axis_idle': False,
-            'z_axis_position': 0.0,
-            'z_alarm_level': False,
-        }
+        self.init_core_data(node)
+
+        # self._core_data = {
+        #     'time': 0.0,
+        #     'linear_speed': 0.0,
+        #     'angular_speed': 0.0,
+        #     'estop1_level': True,
+        #     'estop2_level': True,
+        #     'y_end_l': 0.0,
+        #     'y_end_r': 0.0,
+        #     'y_axis_idle': False,
+        #     'y_axis_position': 0.0,
+        #     'y_alarm_level': False,
+        #     'z_end_t': 0.0,
+        #     'z_end_b': 0.0,
+        #     'z_axis_idle': False,
+        #     'z_axis_position': 0.0,
+        #     'z_alarm_level': False,
+        # }
+
+    def init_core_data(self, node: Node):
+        self._core_data_list = []
+
+        node.declare_parameter('read_data.list', rclpy.Parameter.Type.STRING_ARRAY)
+        # Get the parameter
+        data_list = node.get_parameter('read_data.list').value
+        self._logger.info(f'Received list of strings: {data_list}')
+
+        pos = 0
+        for data in data_list:
+            node.declare_parameter('read_data.' + data + '.type', rclpy.Parameter.Type.STRING)
+            type_str = node.get_parameter('read_data.' + data + '.type').value
+            if (type_str == "bool"):
+                node.declare_parameter('read_data.' + data + '.default', rclpy.Parameter.Type.BOOL)
+            elif (type_str == "int"):
+                node.declare_parameter(
+                    'read_data.' + data + '.default',
+                    rclpy.Parameter.Type.INTEGER)
+            elif (type_str == "double"):
+                node.declare_parameter(
+                    'read_data.' + data + '.default',
+                    rclpy.Parameter.Type.DOUBLE)
+            default = node.get_parameter('read_data.' + data + '.default').value
+            self._core_data_list.append(CoreData(data, pos, type_str, default))
+            pos = pos + 1
+
+        self._core_data = {}
+        for data in self._core_data_list:
+            self._core_data[data.get_name()] = data.get_default()
 
     def enable(self):
         """
@@ -44,10 +99,10 @@ class SerialCommunication(Communication):
         Enable serial communication. There we need to call the flash
         python script from the lizard driver.
         """
-        self.logger.info('Enable esp')
+        self._logger.info('Enable esp')
         command = '/root/.lizard/flash.py enable'
         os.system(command)
-        self.logger.info('Esp is now enabled')
+        self._logger.info('Esp is now enabled')
 
     def open_port(self):
         """Open port to device."""
@@ -56,7 +111,7 @@ class SerialCommunication(Communication):
             # self.port.open()
             self.port = serial.Serial('/dev/esp', 115200)
         except serial.SerialException:
-            self.logger.error('Could not open serial communication!')
+            self._logger.error('Could not open serial communication!')
             self.port = None
 
     def calculate_checksum(self, line: str) -> int:
@@ -78,7 +133,7 @@ class SerialCommunication(Communication):
             self.port.write(line.encode())
             self.mutex.release()
         else:
-            self.logger.warning('No Port open')
+            self._logger.warning('No Port open')
 
     def validate_checksum(self, line: str) -> bool:
         """Validate checksum."""
@@ -87,23 +142,28 @@ class SerialCommunication(Communication):
 
     def handle_core_message(self, words: List[str]) -> None:
         """Handle core message."""
-        # self.logger.info(f'{words}')
+        # self._logger.info(f'{words}')
+
         words.pop(0)
-        self._core_data['time'] = int(words[0])
-        self._core_data['linear_speed'] = float(words[1])
-        self._core_data['angular_speed'] = float(words[2])
-        self._core_data['estop1_level'] = bool(float(words[3]) > 0.5)
-        self._core_data['estop2_level'] = bool((float(words[4]) > 0.5))
-        self._core_data['y_end_l'] = float(words[5])
-        self._core_data['y_end_r'] = float(words[6])
-        self._core_data['y_axis_idle'] = bool(words[7])
-        self._core_data['y_axis_position'] = float(words[8])
-        self._core_data['y_alarm_level'] = bool(words[9])
-        self._core_data['z_end_t'] = float(words[10])
-        self._core_data['z_end_b'] = float(words[11])
-        self._core_data['z_axis_idle'] = bool(words[12])
-        self._core_data['z_axis_position'] = float(words[13])
-        self._core_data['z_alarm_level'] = bool(words[14])
+
+        # self._logger.error(f"{words}")
+        for data in self._core_data_list:
+            if (data.get_type() == "bool"):
+                value = words[data.get_pos()]
+                if value == "true":
+                    value = True
+                elif value == "false":
+                    value = False
+                else:
+                    value = bool(float(words[data.get_pos()]) > 0.5)
+            elif (data.get_type() == "int"):
+                value = int(words[data.get_pos()])
+            elif (data.get_type() == "double"):
+                value = float(words[data.get_pos()])
+            else:
+                return
+
+            self._core_data[data.get_name()] = value
         self.notify_core_observers(self._core_data)
 
     def handle_expander_message(self, words: List[str]):
@@ -124,7 +184,7 @@ class SerialCommunication(Communication):
         # Split lines if we found multiple lines
         lines = buffer.split('\n')
         for line in lines:
-            # self.logger.info(f'{line}')
+            # self._logger.info(f'{line}')
             line = line.rstrip()
             if line[-3:-2] == '@' and line.count('@') == 1:
                 if not self.validate_checksum(line):
@@ -139,7 +199,7 @@ class SerialCommunication(Communication):
                 elif words[0] == 'expander:':
                     self.handle_expander_message(words)
                 elif words[0] == 'error':
-                    self.logger.error(f'{line}')
+                    self._logger.error(f'{line}')
             except BaseException:
-                self.logger.error(f'General exception in the following line: {
-                                  line} from the following buffer {buffer}')
+                self._logger.error(f'General exception in the following line: {
+                    line} from the following buffer {buffer}')

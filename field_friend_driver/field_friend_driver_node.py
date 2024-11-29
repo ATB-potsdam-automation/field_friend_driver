@@ -26,7 +26,7 @@ class FieldFriendDriver(Node):
         configuration_filename = get_package_share_directory(
             PACKAGE_NAME) + '/config/startup.liz'
 
-        self._serial_communication = SerialCommunication(self.get_logger())
+        self._serial_communication = SerialCommunication(self)
 
         self._odom_handler = OdomHandler(self, self._serial_communication)
         self._bms_handler = BMSHandler(self, self._serial_communication)
