@@ -1,3 +1,7 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
+
 class Communication:
     """
     Implement communication interface.
@@ -27,8 +31,8 @@ class Communication:
         for observer in self._bms_observers:
             observer.update(words)
 
-    def send():
-        pass
+    def send(self):
+        """Send data"""
 
-    def read():
-        pass
+    def read(self):
+        """Read data"""

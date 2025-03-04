@@ -1,5 +1,8 @@
 #!/usr/bin/env python3
 
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 import rclpy
 from ament_index_python.packages import get_package_share_directory
 from rclpy.executors import SingleThreadedExecutor

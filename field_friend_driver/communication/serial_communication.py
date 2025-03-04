@@ -1,4 +1,7 @@
 #!/usr/bin/env python3
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 import os
 from functools import reduce
 from operator import ixor
@@ -7,13 +10,14 @@ from typing import Any, List
 
 import rclpy
 import serial
-from rcl_interfaces.msg import ParameterDescriptor
 from rclpy.node import Node
 
 from .communication import Communication
 
 
 class CoreData():
+    """Handles data from the core esp."""
+
     def __init__(self, name: str, pos: int, type: str, default: Any) -> None:
         self._name = name
         self._pos = pos
@@ -21,15 +25,19 @@ class CoreData():
         self._type = type
 
     def get_name(self) -> str:
+        """Get name."""
         return self._name
 
     def get_type(self) -> str:
+        """Get type."""
         return self._type
 
     def get_pos(self) -> int:
+        """Get position in array"""
         return self._pos
 
     def get_default(self) -> Any:
+        """Get default value"""
         return self._default
 
 
@@ -45,6 +53,8 @@ class SerialCommunication(Communication):
         self.init_core_data(node)
 
     def init_core_data(self, node: Node):
+        """Initialize the core data struct. """
+
         self._core_data_list = []
 
         node.declare_parameter('read_data.list', rclpy.Parameter.Type.STRING_ARRAY)

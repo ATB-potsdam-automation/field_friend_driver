@@ -1,3 +1,6 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 from rclpy.node import Node
 from std_msgs.msg import Bool
 

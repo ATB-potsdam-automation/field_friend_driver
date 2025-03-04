@@ -1,3 +1,6 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 import os
 
 import ament_index_python.packages

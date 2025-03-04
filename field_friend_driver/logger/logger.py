@@ -1,3 +1,7 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
+
 class Logger:
     """Handle the logger base class."""
 

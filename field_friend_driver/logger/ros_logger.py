@@ -1,3 +1,6 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 from rclpy.impl.rcutils_logger import RcutilsLogger
 
 from .logger import Logger

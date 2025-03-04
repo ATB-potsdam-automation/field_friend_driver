@@ -1,3 +1,6 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 from math import cos, sin
 
 from geometry_msgs.msg import Pose, Quaternion, TransformStamped, Twist

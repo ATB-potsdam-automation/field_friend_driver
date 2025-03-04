@@ -1,3 +1,6 @@
+""" Copyright (c) 2024 Leibniz-Institut für Agrartechnik und Bioökonomie e.V. (ATB)
+"""
+
 from sensor_msgs.msg import BatteryState
 
 
