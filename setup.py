@@ -1,7 +1,7 @@
-from glob import glob
 import os
+from glob import glob
 
-from setuptools import setup, find_packages
+from setuptools import find_packages, setup
 
 package_name = 'field_friend_driver'
 
@@ -26,8 +26,9 @@ setup(
     zip_safe=True,
     maintainer='ros',
     maintainer_email='tschuette@atb-potsdam.de',
-    description='TODO: Package description',
-    license='TODO: License declaration',
+    maintainer_email='dkloeser@atb-potsdam.de',
+    description='This is a driver for running the field friend hardware.',
+    license='MIT License',
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [

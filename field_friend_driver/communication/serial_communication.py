@@ -44,24 +44,6 @@ class SerialCommunication(Communication):
         self.mutex = Lock()
         self.init_core_data(node)
 
-        # self._core_data = {
-        #     'time': 0.0,
-        #     'linear_speed': 0.0,
-        #     'angular_speed': 0.0,
-        #     'estop1_level': True,
-        #     'estop2_level': True,
-        #     'y_end_l': 0.0,
-        #     'y_end_r': 0.0,
-        #     'y_axis_idle': False,
-        #     'y_axis_position': 0.0,
-        #     'y_alarm_level': False,
-        #     'z_end_t': 0.0,
-        #     'z_end_b': 0.0,
-        #     'z_axis_idle': False,
-        #     'z_axis_position': 0.0,
-        #     'z_alarm_level': False,
-        # }
-
     def init_core_data(self, node: Node):
         self._core_data_list = []
 
