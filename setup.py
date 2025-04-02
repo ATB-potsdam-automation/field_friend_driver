@@ -25,7 +25,6 @@ setup(
     install_requires=['setuptools'],
     zip_safe=True,
     maintainer='ros',
-    maintainer_email='tschuette@atb-potsdam.de',
     maintainer_email='dkloeser@atb-potsdam.de',
     description='This is a driver for running the field friend hardware.',
     license='MIT License',
