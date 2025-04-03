@@ -32,12 +32,23 @@ class FieldFriendDriver(Node):
 
         self._serial_communication = SerialCommunication(self)
 
-        self._odom_handler = OdomHandler(self, self._serial_communication)
-        self._bms_handler = BMSHandler(self, self._serial_communication)
-        self._twist_handler = TwistHandler(self, self._serial_communication)
-        self._estop_handler = EStopHandler(self, self._serial_communication)
-        self._yaxis_handler = YAxisHandler(self, self._serial_communication)
-        self._zaxis_handler = ZAxisHandler(self, self._serial_communication)
+        self.declare_parameter('modules', rclpy.Parameter.Type.STRING_ARRAY)
+        # Get the parameter
+        modules = self.get_parameter('modules').value
+
+        for module in modules:
+            if module == "odom_handler":
+                self._odom_handler = OdomHandler(self, self._serial_communication)
+            elif module == "bms_handler":
+                self._bms_handler = BMSHandler(self, self._serial_communication)
+            elif module == "twist_handler":
+                self._twist_handler = TwistHandler(self, self._serial_communication)
+            elif module == "estop_handler":
+                self._estop_handler = EStopHandler(self, self._serial_communication)
+            elif module == "yaxis_handler":
+                self._yaxis_handler = YAxisHandler(self, self._serial_communication)
+            elif module == "zaxis_handler":
+                self._zaxis_handler = ZAxisHandler(self, self._serial_communication)
         self._configuration_handler = ConfigurationHandler(
             self, self._serial_communication, configuration_filename)
 
