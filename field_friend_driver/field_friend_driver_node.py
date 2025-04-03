@@ -17,8 +17,6 @@ from field_friend_driver.modules.twist_handler import TwistHandler
 from field_friend_driver.modules.yaxis_handler import YAxisHandler
 from field_friend_driver.modules.zaxis_handler import ZAxisHandler
 
-PACKAGE_NAME = 'field_friend_driver'
-
 
 class FieldFriendDriver(Node):
     """Field friend node handler."""
@@ -26,8 +24,11 @@ class FieldFriendDriver(Node):
     def __init__(self):
         super().__init__('field_friend_driver_node')
 
-        configuration_filename = get_package_share_directory(
-            PACKAGE_NAME) + '/config/startup.liz'
+        self.declare_parameter('lizard_file', rclpy.Parameter.Type.STRING)
+        # Get the parameter
+        configuration_filename = self.get_parameter('lizard_file').value
+
+        self.get_logger().info(f'Load lizar file at {configuration_filename}')
 
         self._serial_communication = SerialCommunication(self)
 
