@@ -48,6 +48,8 @@ class SerialCommunication(Communication):
         super().__init__()
         self._logger = node.get_logger()
         self._logger.info('Init serial communication')
+        node.declare_parameter('flashing_arguments', '')
+        self._flashing_arguments = node.get_parameter('flashing_arguments').value
         self.open_port()
         self.mutex = Lock()
         self.init_core_data(node)
@@ -91,8 +93,8 @@ class SerialCommunication(Communication):
         Enable serial communication. There we need to call the flash
         python script from the lizard driver.
         """
-        self._logger.info('Enable esp')
-        command = '/root/.lizard/flash.py enable'
+        command = '/root/.lizard/flash.py ' + self._flashing_arguments + ' enable'
+        self._logger.info(f'Enable esp with the following command: {command}')
         os.system(command)
         self._logger.info('Esp is now enabled')
 

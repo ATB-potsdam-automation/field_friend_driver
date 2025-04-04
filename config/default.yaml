@@ -6,6 +6,26 @@
         pose_stddev: [0.1, 0.1, 0.0, 0.0, 0.0, 0.1] # [m]
         twist_stddev: [0.01, 0.0, 0.0, 0.0, 0.0, 0.01] # [m/s]
         publish_tf: False
+        ## Flasing arguments
+        ## Depending on the vehicle, we need certain arguments for the flashing script at bootup. 
+        ## The flasing is required to enable the esp.
+        ## Examples:
+        ## Z39: '' (nano is the default jetson)
+        ## F10: 'orin v05' orin is the jetson version and v05 because the piggyboard is v0.5 or higher
+        ## Find further information here: https://github.com/zauberzeug/lizard/blob/main/flash.py
+
+        flasing_arguments: ''
+
+        ## Modules
+        ## You can dynamically load the modules that are required. Note that the loaded modules need
+        ## to fit to your read data list. Otherwise exceptions will occur. 
+        modules:
+            - bms_handler
+            - estop_handler
+            - odom_handler
+            - twist_handler
+            - yaxis_handler
+            - zaxis_handler
 
         read_data:
             list:
