@@ -1,3 +1,3 @@
-# Field friend driver
+# Fieldfriend driver
 
-This is a driver to run hardware on the field friend robots from ROS.
+This is a driver to run hardware on the fieldfriend robots from ROS.

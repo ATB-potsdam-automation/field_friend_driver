@@ -3,7 +3,7 @@ from glob import glob
 
 from setuptools import find_packages, setup
 
-package_name = 'field_friend_driver'
+package_name = 'fieldfriend_driver'
 
 setup(
     name=package_name,
@@ -31,7 +31,7 @@ setup(
     tests_require=['pytest'],
     entry_points={
         'console_scripts': [
-            'field_friend_driver_node = field_friend_driver.field_friend_driver_node:main'
+            'fieldfriend_driver_node = fieldfriend_driver.fieldfriend_driver_node:main'
         ],
     },
 )

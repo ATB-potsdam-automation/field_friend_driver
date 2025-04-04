@@ -8,21 +8,21 @@ from ament_index_python.packages import get_package_share_directory
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 
-from field_friend_driver.communication.serial_communication import SerialCommunication
-from field_friend_driver.modules.bms_handler import BMSHandler
-from field_friend_driver.modules.configuration_handler import ConfigurationHandler
-from field_friend_driver.modules.estop_handler import EStopHandler
-from field_friend_driver.modules.odom_handler import OdomHandler
-from field_friend_driver.modules.twist_handler import TwistHandler
-from field_friend_driver.modules.yaxis_handler import YAxisHandler
-from field_friend_driver.modules.zaxis_handler import ZAxisHandler
+from fieldfriend_driver.communication.serial_communication import SerialCommunication
+from fieldfriend_driver.modules.bms_handler import BMSHandler
+from fieldfriend_driver.modules.configuration_handler import ConfigurationHandler
+from fieldfriend_driver.modules.estop_handler import EStopHandler
+from fieldfriend_driver.modules.odom_handler import OdomHandler
+from fieldfriend_driver.modules.twist_handler import TwistHandler
+from fieldfriend_driver.modules.yaxis_handler import YAxisHandler
+from fieldfriend_driver.modules.zaxis_handler import ZAxisHandler
 
 
-class FieldFriendDriver(Node):
+class FieldfriendDriver(Node):
     """Field friend node handler."""
 
     def __init__(self):
-        super().__init__('field_friend_driver_node')
+        super().__init__('fieldfriend_driver_node')
 
         self.declare_parameter('lizard_file', rclpy.Parameter.Type.STRING)
         # Get the parameter
@@ -64,10 +64,10 @@ def main(args=None):
     rclpy.init(args=args)
 
     try:
-        field_friend_driver = FieldFriendDriver()
+        fieldfriend_driver = FieldfriendDriver()
 
         executor = SingleThreadedExecutor()
-        executor.add_node(field_friend_driver)
+        executor.add_node(fieldfriend_driver)
 
         try:
             executor.spin()

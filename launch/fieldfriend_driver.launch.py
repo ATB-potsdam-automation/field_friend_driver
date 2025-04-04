@@ -17,7 +17,7 @@ def generate_launch_description():
 
     config_directory = os.path.join(
         ament_index_python.packages.get_package_share_directory(
-            'field_friend_driver'),
+            'fieldfriend_driver'),
         'config')
     config_file_launch_arg = DeclareLaunchArgument(
         'config_file', default_value=os.path.join(config_directory, 'default.yaml')
@@ -30,8 +30,8 @@ def generate_launch_description():
         config_file_launch_arg,
         lizard_file_launch_arg,
         Node(
-            package='field_friend_driver',
-            executable='field_friend_driver_node',
+            package='fieldfriend_driver',
+            executable='fieldfriend_driver_node',
             parameters=[config_file, {'lizard_file': lizard_file}],
             respawn=True,
             respawn_delay=5,

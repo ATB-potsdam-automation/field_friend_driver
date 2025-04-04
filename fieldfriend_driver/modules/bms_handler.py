@@ -7,8 +7,8 @@ from geometry_msgs.msg import PoseStamped
 from rclpy.node import Node
 from sensor_msgs.msg import BatteryState
 
-from field_friend_driver.communication.communication import Communication
-from field_friend_driver.data.data_bms import DataBMS
+from fieldfriend_driver.communication.communication import Communication
+from fieldfriend_driver.data.data_bms import DataBMS
 
 
 class BMSHandler:

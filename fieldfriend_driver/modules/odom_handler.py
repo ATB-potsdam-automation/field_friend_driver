@@ -9,8 +9,8 @@ from nav_msgs.msg import Odometry
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
 
-from field_friend_driver.communication.communication import Communication
-from field_friend_driver.data.data_odom import DataOdom
+from fieldfriend_driver.communication.communication import Communication
+from fieldfriend_driver.data.data_odom import DataOdom
 
 
 class OdomHandler:

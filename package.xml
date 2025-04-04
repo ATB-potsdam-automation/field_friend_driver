@@ -1,7 +1,7 @@
 <?xml version="1.0"?>
 <?xml-model href="http://download.ros.org/schema/package_format3.xsd" schematypens="http://www.w3.org/2001/XMLSchema"?>
 <package format="3">
-  <name>field_friend_driver</name>
+  <name>fieldfriend_driver</name>
   <version>0.0.5</version>
   <description>TODO: Package description</description>
   <maintainer email="tschuette@atb-potsdam.de">ros</maintainer>

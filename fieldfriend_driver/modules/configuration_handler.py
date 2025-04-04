@@ -4,7 +4,7 @@
 from rclpy.node import Node
 from std_msgs.msg import String
 
-from field_friend_driver.communication.communication import Communication
+from fieldfriend_driver.communication.communication import Communication
 
 
 class ConfigurationHandler:
