@@ -13,8 +13,10 @@
         ## Z39: '' (nano is the default jetson)
         ## F10: 'orin v05' orin is the jetson version and v05 because the piggyboard is v0.5 or higher
         ## Find further information here: https://github.com/zauberzeug/lizard/blob/main/flash.py
-
-        flasing_arguments: ''
+        ## In some cases (e.g. F10) we needed a slight delay after flashing the esp. Otherwise the esp did not boot up correctly.
+        ## The delay is in seconds and can be set with the sleep_after_flash parameter.
+        flashing_arguments: ''
+        sleep_after_flash: 0 # seconds
 
         ## Modules
         ## You can dynamically load the modules that are required. Note that the loaded modules need

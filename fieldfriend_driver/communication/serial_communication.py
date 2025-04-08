@@ -3,6 +3,7 @@
 """
 
 import os
+import time
 from functools import reduce
 from operator import ixor
 from threading import Lock
@@ -50,6 +51,8 @@ class SerialCommunication(Communication):
         self._logger.info('Init serial communication')
         node.declare_parameter('flashing_arguments', '')
         self._flashing_arguments = node.get_parameter('flashing_arguments').value
+        node.declare_parameter('sleep_after_flash', 0)
+        self._sleep_after_flash = node.get_parameter('sleep_after_flash').value
         self.open_port()
         self.mutex = Lock()
         self.init_core_data(node)
@@ -96,6 +99,7 @@ class SerialCommunication(Communication):
         command = '/root/.lizard/flash.py ' + self._flashing_arguments + ' enable'
         self._logger.info(f'Enable esp with the following command: {command}')
         os.system(command)
+        time.sleep(self._sleep_after_flash)
         self._logger.info('Esp is now enabled')
 
     def open_port(self):
