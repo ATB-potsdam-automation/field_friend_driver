@@ -29,6 +29,11 @@
             - yaxis_handler
             - zaxis_handler
 
+        ## Parameter for the twist handler
+        twist_handler:
+            twist_timeout: 1.0  # [s]   Stop the robot if the cmd_vel is not received for this time
+            send_twist_frequency: 20.0  # [hz] Send twist command to esp with this frequency
+
         read_data:
             list:
                 - time

@@ -28,12 +28,11 @@ class FieldfriendDriver(Node):
         # Get the parameter
         configuration_filename = self.get_parameter('lizard_file').value
 
-        self.get_logger().info(f'Load lizar file at {configuration_filename}')
+        self.get_logger().info(f'Load lizard file at {configuration_filename}')
 
         self._serial_communication = SerialCommunication(self)
 
         self.declare_parameter('modules', rclpy.Parameter.Type.STRING_ARRAY)
-        # Get the parameter
         modules = self.get_parameter('modules').value
 
         for module in modules:
