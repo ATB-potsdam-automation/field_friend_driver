@@ -20,11 +20,12 @@ class TwistHandler:
 
         self._twist = Twist()
 
-        node.declare_parameter('twist_handler.twist_timeout', Parameter.Type.DOUBLE)
-        twist_timeout = node.get_parameter('twist_handler.twist_timeout').value
+        node.declare_parameter('modules.twist_handler.twist_timeout', Parameter.Type.DOUBLE)
+        twist_timeout = node.get_parameter('modules.twist_handler.twist_timeout').value
 
-        node.declare_parameter('twist_handler.send_twist_frequency', Parameter.Type.DOUBLE)
-        send_twist_frequency = node.get_parameter('twist_handler.send_twist_frequency').value
+        node.declare_parameter('modules.twist_handler.send_twist_frequency', Parameter.Type.DOUBLE)
+        send_twist_frequency = node.get_parameter(
+            'modules.twist_handler.send_twist_frequency').value
 
         self.cmd_subscription = node.create_subscription(
             Twist, 'cmd_vel', self.cmd_callback, 10

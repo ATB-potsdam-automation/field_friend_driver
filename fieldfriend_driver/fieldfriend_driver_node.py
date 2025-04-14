@@ -11,6 +11,7 @@ from rclpy.node import Node
 from fieldfriend_driver.communication.serial_communication import SerialCommunication
 from fieldfriend_driver.modules.bms_handler import BMSHandler
 from fieldfriend_driver.modules.configuration_handler import ConfigurationHandler
+from fieldfriend_driver.modules.estop_button_handler import EStopButtonHandler
 from fieldfriend_driver.modules.estop_handler import EStopHandler
 from fieldfriend_driver.modules.odom_handler import OdomHandler
 from fieldfriend_driver.modules.twist_handler import TwistHandler
@@ -32,22 +33,31 @@ class FieldfriendDriver(Node):
 
         self._serial_communication = SerialCommunication(self)
 
-        self.declare_parameter('modules', rclpy.Parameter.Type.STRING_ARRAY)
-        modules = self.get_parameter('modules').value
+        self.declare_parameter('modules.module_list', rclpy.Parameter.Type.STRING_ARRAY)
+        modules = self.get_parameter('modules.module_list').value
 
+        self._module_handler = []
         for module in modules:
-            if module == "odom_handler":
-                self._odom_handler = OdomHandler(self, self._serial_communication)
-            elif module == "bms_handler":
-                self._bms_handler = BMSHandler(self, self._serial_communication)
-            elif module == "twist_handler":
-                self._twist_handler = TwistHandler(self, self._serial_communication)
-            elif module == "estop_handler":
-                self._estop_handler = EStopHandler(self, self._serial_communication)
-            elif module == "yaxis_handler":
-                self._yaxis_handler = YAxisHandler(self, self._serial_communication)
-            elif module == "zaxis_handler":
-                self._zaxis_handler = ZAxisHandler(self, self._serial_communication)
+            param_name = 'modules.' + module + '.type'
+            self.declare_parameter(param_name, rclpy.Parameter.Type.STRING)
+            type_name = self.get_parameter(param_name).value
+            if type_name == "odom_handler":
+                self._module_handler.append(OdomHandler(self, self._serial_communication))
+            elif type_name == "bms_handler":
+                self._module_handler.append(BMSHandler(self, self._serial_communication))
+            elif type_name == "twist_handler":
+                self._module_handler.append(TwistHandler(self, self._serial_communication))
+            elif type_name == "estop_handler":
+                self._module_handler.append(EStopHandler(self, self._serial_communication))
+            elif type_name == "yaxis_handler":
+                self._module_handler.append(YAxisHandler(self, self._serial_communication))
+            elif type_name == "zaxis_handler":
+                self._module_handler.append(ZAxisHandler(self, self._serial_communication))
+            elif type_name == "estop_button_handler":
+                self._module_handler.append(EStopButtonHandler(
+                    self, self._serial_communication, module))
+            else:
+                self.get_logger().error(f"Unknown module type: {type_name}")
         self._configuration_handler = ConfigurationHandler(
             self, self._serial_communication, configuration_filename)
 
