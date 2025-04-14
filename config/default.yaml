@@ -22,17 +22,58 @@
         ## You can dynamically load the modules that are required. Note that the loaded modules need
         ## to fit to your read data list. Otherwise exceptions will occur. 
         modules:
-            - bms_handler
-            - estop_handler
-            - odom_handler
-            - twist_handler
-            - yaxis_handler
-            - zaxis_handler
+            module_list:
+                - bms_handler
+                - estop_handler
+                - estop_button_front_handler
+                - estop_button_rear_handler
+                - odom_handler
+                - twist_handler
+                - yaxis_handler
+                - zaxis_handler
 
-        ## Parameter for the twist handler
-        twist_handler:
-            twist_timeout: 1.0  # [s]   Stop the robot if the cmd_vel is not received for this time
-            send_twist_frequency: 20.0  # [hz] Send twist command to esp with this frequency
+            bms_handler:
+                type: bms_handler
+
+            estop_button_front_handler:
+                type: estop_button_handler
+                topic_name: button_front
+                data_name: estop1_level
+            
+            estop_button_rear_handler:
+                type: estop_button_handler
+                topic_name: button_rear
+                data_name: estop2_level
+
+            odom_handler:
+                type: odom_handler
+
+            yaxis_handler:
+                type: yaxis_handler
+            
+            zaxis_handler:
+                type: zaxis_handler
+
+            ## Parameter for the twist handler
+            twist_handler:
+                twist_timeout: 1.0  # [s]   Stop the robot if the cmd_vel is not received for this time
+                send_twist_frequency: 20.0  # [hz] Send twist command to esp with this frequency
+
+            ## There are two types of emergency stops. The software controlled estop and the hardware controlled. 
+            ## When a software controlled estop is triggered, we need to send a command to the esp to stop the robot 
+            ## and trigger the emergency stop. Since a hardware emergency stop is triggered by a button, we do not need 
+            ## to send a command to the esp.
+            estop_handler:
+                type: estop_handler
+                estop_list:             # List of emergency stops
+                    - button_front
+                
+                button_front:
+                    name: button_front                      # Name for messages
+                    topic: /emergency_stop/button_front     # Topic name
+                    software_estop: false                   # True if the estop is software controlled
+                    timeout: 2.0                            # Timeout after which the estop is triggered. Does not really have function in the hardware estop case
+                    init_triggered: false                   # True if the estop is triggered at startup. If yes, the estop needs to be released before the robot can be started
 
         read_data:
             list:
