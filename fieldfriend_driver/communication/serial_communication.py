@@ -194,10 +194,9 @@ class SerialCommunication(Communication):
                     return
                 if words[0] == 'core':
                     self.handle_core_message(words)
-                elif words[0] == 'expander:':
+                elif words[0] == 'expander:' or words[0] == 'p0:':
                     self.handle_expander_message(words)
                 elif words[0] == 'error':
                     self._logger.error(f'{line}')
             except BaseException:
-                self._logger.error(f'General exception in the following line: {
-                    line} from the following buffer {buffer}')
+                self._logger.error(f'General exception in the following line: {line} from the following buffer {buffer}')
