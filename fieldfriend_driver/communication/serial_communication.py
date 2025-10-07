@@ -96,7 +96,7 @@ class SerialCommunication(Communication):
         Enable serial communication. There we need to call the flash
         python script from the lizard driver.
         """
-        command = '/root/.lizard/espresso.py enable' + self._flashing_arguments
+        command = '/root/.lizard/espresso.py enable ' + self._flashing_arguments
         self._logger.info(f'Enable esp with the following command: {command}')
         os.system(command)
         time.sleep(self._sleep_after_flash)
