@@ -173,6 +173,8 @@ class SerialCommunication(Communication):
 
     def read(self) -> None:
         """Read from serial device."""
+        if self.port is None:
+            return
         try:
             self.mutex.acquire()
             buffer = self.port.read_all().decode(errors='replace')
