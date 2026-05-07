@@ -8,6 +8,7 @@ from functools import reduce
 from operator import ixor
 from threading import Lock
 from typing import Any, List
+import subprocess
 
 import rclpy
 import serial
@@ -96,11 +97,18 @@ class SerialCommunication(Communication):
         Enable serial communication. There we need to call the flash
         python script from the lizard driver.
         """
-        command = '/root/.lizard/espresso.py enable ' + self._flashing_arguments
-        self._logger.info(f'Enable esp with the following command: {command}')
-        os.system(command)
+        command = f"/root/.lizard/espresso.py enable {self._flashing_arguments}"
+        self._logger.info(f"Enable esp with the following command: {command}")
+        result = subprocess.run(
+            command,
+            shell=True,
+            capture_output=True,
+            text=True
+        )
+        self._logger.info(f"ESP stdout:\n{result.stdout}")
+        self._logger.warning(f"ESP stderr:\n{result.stderr}")
         time.sleep(self._sleep_after_flash)
-        self._logger.info('Esp is now enabled')
+        self._logger.info("Esp is now enabled")
 
     def open_port(self):
         """Open port to device."""
