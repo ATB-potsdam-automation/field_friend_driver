@@ -122,7 +122,11 @@ class SerialCommunication(Communication):
 
     def calculate_checksum(self, line: str) -> int:
         """Calculate checkusm of line."""
-        return reduce(ixor, map(ord, line))
+        try:
+            checksum = reduce(ixor, (ord(c) for c in line), 0)
+        except BaseException:
+            checksum = 0
+        return checksum
 
     def append_checksum(self, line: str) -> str:
         """Append checksum to the line."""
