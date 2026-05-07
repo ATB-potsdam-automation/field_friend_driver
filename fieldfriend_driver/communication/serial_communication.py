@@ -125,6 +125,7 @@ class SerialCommunication(Communication):
         try:
             checksum = reduce(ixor, (ord(c) for c in line), 0)
         except BaseException:
+            self._logger.error(f'General exception in the following line: {line}')
             checksum = 0
         return checksum
 
