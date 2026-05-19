@@ -215,7 +215,7 @@ class SerialCommunication(Communication):
                 elif words[0] == 'expander:' or words[0] == 'p0:':
                     self.handle_expander_message(words)
                 elif words[0] == 'error':
-                    self._logger.error(f'{line}')
+                    self._logger.debug(f'Error on serial line: {line}')
             except BaseException:
                 self._logger.error(
                     f'General exception in the following line: {line} from the following buffer {buffer}')
