@@ -56,6 +56,6 @@ class TwistHandler:
 
     def twist_timeout(self):
         """Handle timeout of the twist message."""
-        self._logger.warning('Twist timeout. Stopping robot.')
+        self._logger.debug('Twist timeout. Stopping robot.')
         self._twist_timeout_timer.cancel()
         self._twist = Twist()
