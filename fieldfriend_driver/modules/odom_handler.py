@@ -26,16 +26,16 @@ class OdomHandler:
         self.current_pose = PoseStamped()
 
         # Red parameter
-        node.declare_parameter('twist_stddev', np.zeros(36).tolist())
-        twist_stddev = node.get_parameter('twist_stddev')
+        node.declare_parameter('modules.odom.handler.twist_stddev', np.zeros(36).tolist())
+        twist_stddev = node.get_parameter('modules.odom.handler.twist_stddev')
         twist_cov = np.asarray(np.diag(twist_stddev.value)).reshape(-1)
         self._logger.debug(f'Linear twist convariance {twist_cov}')
-        node.declare_parameter('pose_stddev', np.zeros(36).tolist())
-        pose_stddev = node.get_parameter('pose_stddev')
+        node.declare_parameter('modules.odom.handler.pose_stddev', np.zeros(36).tolist())
+        pose_stddev = node.get_parameter('modules.odom.handler.pose_stddev')
         pose_cov = np.asarray(np.diag(pose_stddev.value)).reshape(-1)
         self._logger.debug(f'Linear pose convariance {pose_cov}')
-        node.declare_parameter('publish_tf', False)
-        self._publish_tf = node.get_parameter('publish_tf').value
+        node.declare_parameter('modules.odom.handler.publish_tf', False)
+        self._publish_tf = node.get_parameter('modules.odom.handler.publish_tf').value
 
         # Publisher
         self._publisher = node.create_publisher(Odometry, 'odom', 10)
