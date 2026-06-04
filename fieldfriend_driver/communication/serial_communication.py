@@ -3,12 +3,12 @@
 """
 
 import os
+import subprocess
 import time
 from functools import reduce
 from operator import ixor
 from threading import Lock
 from typing import Any, List
-import subprocess
 
 import rclpy
 import serial
@@ -57,6 +57,7 @@ class SerialCommunication(Communication):
         self.open_port()
         self.mutex = Lock()
         self.init_core_data(node)
+        self._buffer = ''
 
     def init_core_data(self, node: Node):
         """Initialize the core data struct. """
@@ -190,16 +191,15 @@ class SerialCommunication(Communication):
             self._logger.warning('No Port open')
             return
         try:
-            self.mutex.acquire()
-            buffer = self.port.read_all().decode(errors='replace')
-        except BaseException:
+            with self.mutex:
+                self._buffer += self.port.read_all().decode(errors='replace')
+        except Exception:
             self._logger.error('Error while reading from serial port')
-        finally:
-            self.mutex.release()
 
         # Split lines if we found multiple lines
-        lines = buffer.split('\n')
-        for line in lines:
+        while '\n' in self._buffer:
+            line, self._buffer = self._buffer.split('\n', 1)
+
             # self._logger.info(f'{line}')
             line = line.rstrip()
             if line[-3:-2] == '@' and line.count('@') == 1:
