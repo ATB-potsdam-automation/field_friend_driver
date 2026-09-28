@@ -47,6 +47,7 @@
 
             odom_handler:
                 type: odom_handler
+                publish_frequency: 20.0 # [hz] Rate at which odometry is published, decoupled from the esp message rate
 
             yaxis_handler:
                 type: yaxis_handler

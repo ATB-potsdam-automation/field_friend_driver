@@ -6,6 +6,8 @@ from typing import Dict
 import numpy as np
 from geometry_msgs.msg import PoseStamped
 from nav_msgs.msg import Odometry
+from rclpy.clock import Clock
+from rclpy.clock_type import ClockType
 from rclpy.node import Node
 from tf2_ros import TransformBroadcaster
 
@@ -36,6 +38,11 @@ class OdomHandler:
         self._logger.debug(f'Linear pose convariance {pose_cov}')
         node.declare_parameter('modules.odom.handler.publish_tf', False)
         self._publish_tf = node.get_parameter('modules.odom.handler.publish_tf').value
+        # The esp can report speed updates much faster than any consumer needs
+        # odometry. Publishing on every incoming message would waste a lot of
+        # CPU on message serialization, so we decouple it with its own timer.
+        node.declare_parameter('modules.odom.handler.publish_frequency', 20.0)
+        publish_frequency = node.get_parameter('modules.odom.handler.publish_frequency').value
 
         # Publisher
         self._publisher = node.create_publisher(Odometry, 'odom', 10)
@@ -45,6 +52,10 @@ class OdomHandler:
         self._data: DataOdom = DataOdom(pose_cov, twist_cov, self._logger)
 
         comm.register_core_observer(self)
+
+        self.steady_clock = Clock(clock_type=ClockType.STEADY_TIME)
+        self._publish_timer = node.create_timer(
+            1 / publish_frequency, self.publish_odom, clock=self.steady_clock)
 
     def publish_odom(self):
         """Publish odometry data to ros."""
@@ -60,4 +71,3 @@ class OdomHandler:
             self._clock.now(),
             data['linear_speed'],
             data['angular_speed'])
-        self.publish_odom()

@@ -7,8 +7,9 @@ import rclpy
 from ament_index_python.packages import get_package_share_directory
 from rclpy.clock import Clock
 from rclpy.clock_type import ClockType
-from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
+# Avoids the per-wakeup wait-set rebuild cost of the default executor.
+from rclpy.experimental.events_executor import EventsExecutor
 
 from fieldfriend_driver.communication.serial_communication import SerialCommunication
 from fieldfriend_driver.modules.bms_handler import BMSHandler
@@ -78,7 +79,7 @@ def main(args=None):
     try:
         fieldfriend_driver = FieldfriendDriver()
 
-        executor = SingleThreadedExecutor()
+        executor = EventsExecutor()
         executor.add_node(fieldfriend_driver)
 
         try:
