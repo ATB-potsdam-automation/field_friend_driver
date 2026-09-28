@@ -4,6 +4,8 @@
 from typing import Dict
 
 from geometry_msgs.msg import PoseStamped
+from rclpy.clock import Clock
+from rclpy.clock_type import ClockType
 from rclpy.node import Node
 from sensor_msgs.msg import BatteryState
 
@@ -27,7 +29,8 @@ class BMSHandler:
         self._publisher = node.create_publisher(BatteryState, 'battery_state', 10)
 
         comm.register_bms_observer(self)
-        self._send_request_timer = node.create_timer(1, self.send_request)
+        self.steady_clock = Clock(clock_type=ClockType.STEADY_TIME)
+        self._send_request_timer = node.create_timer(1, self.send_request, clock=self.steady_clock)
 
     def update(self, data: Dict) -> None:
         """Read the data from a list of words."""

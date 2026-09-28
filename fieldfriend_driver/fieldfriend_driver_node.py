@@ -5,6 +5,8 @@
 
 import rclpy
 from ament_index_python.packages import get_package_share_directory
+from rclpy.clock import Clock
+from rclpy.clock_type import ClockType
 from rclpy.executors import SingleThreadedExecutor
 from rclpy.node import Node
 
@@ -61,7 +63,8 @@ class FieldfriendDriver(Node):
         self._configuration_handler = ConfigurationHandler(
             self, self._serial_communication, configuration_filename)
 
-        self.read_timer = self.create_timer(0.05, self.read_data)
+        self.steady_clock = Clock(clock_type=ClockType.STEADY_TIME)
+        self.read_timer = self.create_timer(0.05, self.read_data, clock=self.steady_clock)
 
     def read_data(self):
         """Read data from the serial communication."""

@@ -2,6 +2,8 @@
 """
 
 from rclpy.node import Node, Parameter
+from rclpy.clock import Clock
+from rclpy.clock_type import ClockType
 from rclpy.qos import QoSDurabilityPolicy, QoSProfile
 from std_msgs.msg import Bool, String
 
@@ -40,8 +42,9 @@ class EStop:
         node.declare_parameter(param_topic, Parameter.Type.DOUBLE)
         timeout = node.get_parameter(param_topic).value
         if timeout > 0.0:
+            self.steady_clock = Clock(clock_type=ClockType.STEADY_TIME)
             self._timeout_timer = node.create_timer(
-                timeout, self.timeout_callback
+                timeout, self.timeout_callback, clock=self.steady_clock
             )
         else:
             self._timeout_timer = None

@@ -3,6 +3,8 @@
 
 from geometry_msgs.msg import Twist
 from rclpy.node import Node, Parameter
+from rclpy.clock import Clock
+from rclpy.clock_type import ClockType
 
 from fieldfriend_driver.communication.communication import Communication
 
@@ -30,10 +32,10 @@ class TwistHandler:
         self.cmd_subscription = node.create_subscription(
             Twist, 'cmd_vel', self.cmd_callback, 10
         )
-
-        self._send_twist_timer = node.create_timer(1 / send_twist_frequency, self.send_twist)
+        self.steady_clock = Clock(clock_type=ClockType.STEADY_TIME)
+        self._send_twist_timer = node.create_timer(1 / send_twist_frequency, self.send_twist, clock=self.steady_clock)
         self._twist_timeout_timer = node.create_timer(
-            twist_timeout, self.twist_timeout, autostart=False)
+            twist_timeout, self.twist_timeout, autostart=False, clock=self.steady_clock)
 
     def send(self) -> str:
         """Send message to serial port."""
