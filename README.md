@@ -4,15 +4,15 @@ ROS 2 hardware driver for FieldFriend robots. The `fieldfriend_driver_node` comm
 
 ## Requirements
 
-- ROS 2 and `colcon` (the project container currently uses ROS 2 Jazzy)
+- ROS 2 and `colcon` (the Docker image uses ROS 2 Jazzy by default)
 - A FieldFriend controller with its ESP connected at `/dev/esp`
 - The Lizard tools installed at `/root/.lizard/espresso.py`; the driver calls this tool at startup to enable the ESP
 
-When running outside the project container, make sure the connected serial device is available as `/dev/esp` and the process has permission to access it. The ESP connection uses 115200 baud.
+When running outside Docker, make sure the connected serial device is available as `/dev/esp` and the process has permission to access it. The ESP connection uses 115200 baud.
 
 ## Build
 
-From the root of the `app_fieldfriend` workspace:
+From the root of a ROS 2 workspace containing this package:
 
 ```bash
 source /opt/ros/jazzy/setup.bash
@@ -22,6 +22,26 @@ source install/setup.bash
 ```
 
 Use the setup file for the ROS 2 distribution installed on your system if it is not Jazzy.
+
+## Docker
+
+Build the image from the package directory:
+
+```bash
+docker build -t fieldfriend-driver .
+```
+
+Run it with the robot's serial device mapped to `/dev/esp`:
+
+```bash
+docker run --rm --privileged --network host \
+	--device /dev/ttyTHS0:/dev/esp \
+	fieldfriend-driver ros2 run fieldfriend_driver fieldfriend_driver_node --ros-args \
+	--params-file /workspace/install/fieldfriend_driver/share/fieldfriend_driver/config/default.yaml \
+	-p lizard_file:=/workspace/install/fieldfriend_driver/share/fieldfriend_driver/config/startup.liz
+```
+
+Change `/dev/ttyTHS0` to the host serial device used by the robot. The image includes the Lizard tools and the built driver.
 
 ## Run
 
